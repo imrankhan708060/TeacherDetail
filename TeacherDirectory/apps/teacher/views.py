@@ -53,7 +53,6 @@ class TeacherUploadCsvView(LoginRequiredMixin,View):
                         file = open(os.path.join(settings.STATIC_ROOT, f'images/{21230}.JPG'), "rb")
                         user.avatar.save(f"{21230}.JPG", file, save=True)
                     teacher_taught_value=value['Subjects taught'].split(', ')
-                    print(teacher_taught_value[:5])
                     for subject_value in teacher_taught_value[:5]:
                         subject_assign = Subject.objects.get(subject_name=subject_value.capitalize())
                         user.subject.add(subject_assign)
