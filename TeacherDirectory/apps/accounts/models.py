@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 # from phonenumber_field.modelfields import PhoneNumberField
@@ -79,7 +80,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     avatar = models.ImageField(upload_to='users/avatars/', max_length=255, blank=True, null=True)
     room_number=models.CharField(max_length=50)
-    subject = models.ManyToManyField(Subject)
+    subject = models.ManyToManyField(Subject,null=True,blank=True)
     objects = UserManager()
 
     EMAIL_FIELD = 'email'
@@ -116,3 +117,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             return full_name
         else:
             return self.username
+
+    def get_absolute_url(self):
+        return reverse("teacher-detail", kwargs={"pk": self.pk})
+
+
+

@@ -1,0 +1,26 @@
+{%extends "teacher/new_base.html"%}
+
+{%block title%} Teacher Detail {%endblock%}
+
+{%block body%}
+<div class="container">
+<div class="card" style="width: 18rem; margin: 0">
+  <img src="{{object.avatar.url}}" class="card-img-top" alt="...">
+  <div class="card-body">
+      <h5 class="card-title">Email <span class="badge bg-secondary">{{object.email}}</span></h5>
+       <h5 class="card-title">First Name <span class="badge bg-secondary">{{object.first_name}}</span></h5>
+      <h5 class="card-title">Last Name <span class="badge bg-secondary">{{object.last_name}}</span></h5>
+      <h5 class="card-title">Phone Number <span class="badge bg-secondary">{{object.phone_number}}</span></h5>
+      <h5 class="card-title">Room Number <span class="badge bg-secondary">{{object.room_number}}</span></h5>
+      <ul class="list-group list-group-flush">
+          {%for i in object.subject.all%}
+    <li class="list-group-item">{{i}}</li>
+
+          {%endfor%}
+  </ul>
+    <a href="{%url 'teacher-list'%}" class="btn btn-primary">TeacherList</a>
+  </div>
+</div>
+</div>
+
+{%endblock%}

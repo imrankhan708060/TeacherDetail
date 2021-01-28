@@ -1,0 +1,12 @@
+{%extends 'teacher/base.html'%}
+
+{% block title %}
+TeacherAdd
+{% endblock title %}
+
+{% block content %}
+<form method="POST" class="ui form" enctype="multipart/form-data">{%csrf_token%}
+  {{form}}
+    <button type="submit" class="ui button primary">Upload</button>
+</form>
+{% endblock content %}
