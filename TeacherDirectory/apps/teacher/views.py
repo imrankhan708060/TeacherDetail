@@ -34,14 +34,12 @@ class TeacherUploadCsvView(LoginRequiredMixin,View):
             portfolio1 = csv.DictReader(paramFile)
             list_of_dict = list(portfolio1)
             for value in list_of_dict:
-                try:
-                    user=User.objects.get(email=value['Email Address'])
-                    messages.info(request, "User with this email already exist")
-                    return redirect('teacher-list')
-                except User.DoesNotExist:
+                if len(User.objects.filter(email=value['Email Address']))>0:
+                    continue
+                else:
                     user=User.objects.create(first_name=value['First Name'],last_name=value['Last Name'],
-                                             email=value['Email Address'],room_number=value['Room Number'],
-                                             username=value['Email Address'],phone_number=value['Phone Number'])
+                                                 email=value['Email Address'],room_number=value['Room Number'],
+                                                 username=value['Email Address'],phone_number=value['Phone Number'])
                     if value['Profile picture'].endswith('jpg') or value['Profile picture'].endswith('JPG'):
                         image=value['Profile picture']
                         file_available=os.path.isfile(os.path.join(settings.STATIC_ROOT, f'images/{image}'))
@@ -54,14 +52,16 @@ class TeacherUploadCsvView(LoginRequiredMixin,View):
                     else:
                         file = open(os.path.join(settings.STATIC_ROOT, f'images/{21230}.JPG'), "rb")
                         user.avatar.save(f"{21230}.JPG", file, save=True)
-                    for subject_value in value['Subjects taught'].split(', '):
+                    teacher_taught_value=value['Subjects taught'].split(', ')
+                    print(teacher_taught_value[:5])
+                    for subject_value in teacher_taught_value[:5]:
                         subject_assign = Subject.objects.get(subject_name=subject_value.capitalize())
                         user.subject.add(subject_assign)
                         user.save()
-                obj.activated=True
-                obj.save()
-                messages.success(request, "All the data successfully save")
-                return redirect('teacher-list')
+            obj.activated=True
+            obj.save()
+            messages.success(request, "All the data successfully save")
+            return redirect('teacher-list')
         else:
             return redirect('teacher-list')
 
